@@ -11,14 +11,41 @@ class ProductController extends Controller
 {
     public function ViewProducts()
     {
-        $data['contracts'] = Contract::all();
-        $data['products'] = Product::all();
+        $data['products'] = Product::with(['contracts'])->get();
+        // dd($data['products']->toArray());
         return view('backend.products.view_products',$data);
     }
 
     public function AddProducts()
     {
-        $data['contracts'] = Contract::all();
-        return view('backend.products.add_products',$data);
+        return view('backend.products.add_products');
+    }
+
+    public function StoreProducts(Request $request)
+    {
+        $validateData = $request->validate([
+            'name' => 'required',
+        ]);
+
+        $product = new Product();
+        $product->name = $request->name;
+        $product->save();
+
+        return redirect()->route('view.products');
+    }
+
+    public function EditProducts($id)
+    {
+        $data['editData'] = Product::find($id);
+        return view ('backend.products.edit_products', $data);
+    }
+
+    public function UpdateProducts(Request $request, $id)
+    {
+        $product = Product::find($id);
+        $product->name = $request->name;
+        $product->save();
+
+        return redirect()->route('view.products');
     }
 }

@@ -32,11 +32,17 @@ Route::prefix('/provider')->group(function(){
 Route::prefix('/contract')->group(function(){
     Route::get('/contract/view', [ContractController::class, 'ViewContracts'])->name('view.contracts');
     Route::get('/contract/add', [ContractController::class, 'AddContracts'])->name('add.contracts');
+    Route::post('/contract/store', [ContractController::class, 'StoreContracts'])->name('store.contracts');
+    Route::get('/contract/edit/{id}', [ContractController::class, 'EditContracts'])->name('edit.contracts');
+    Route::post('/contract/update/{id}', [ContractController::class, 'UpdateContracts'])->name('update.contracts');
     
     });
 
     Route::prefix('/products')->group(function(){
     Route::get('/product/view', [ProductController::class, 'ViewProducts'])->name('view.products');
     Route::get('/product/add', [ProductController::class, 'AddProducts'])->name('add.products');
+    Route::post('/product/store', [ProductController::class, 'StoreProducts'])->name('store.products');
+    Route::get('/product/edit/{id}', [ProductController::class, 'EditProducts'])->name('edit.products');
+    Route::post('/product/update/{id}', [ProductController::class, 'UpdateProducts'])->name('update.products');
     
     });

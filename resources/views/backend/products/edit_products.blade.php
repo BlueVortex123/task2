@@ -9,7 +9,7 @@
                     <div class="row">
                         <h3>Products Add Page</h3><br>
                     </div>
-                <form method="post" action="{{ route('store.products') }}">
+                <form method="post" action="{{ route('update.products', $editData->id ) }}">
                     @csrf
                     <div class="row"> 
                         <div class="col-md-6">
@@ -23,7 +23,7 @@
                             <div class="form-group">
                                 <h5> Product Name <span class="text-danger">*</span></h5>
                                 <div class="controls">
-                                    <input type="text" name="name"  class="form-control" required="" >
+                                    <input type="text" name="name" value="{{ $editData->name }}"  class="form-control" required="" >
                                 </div>
                             </div> 
                         </div> 

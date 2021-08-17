@@ -26,10 +26,10 @@
                                 @foreach($products as $key => $product )
                                 <tr>
                                     <td>{{ $key+1 }}</td>
-                                    <td>{{ $provider->name }}</td>
-                                    <td>{{ $provider['contracts']['name'] }}</td>
+                                    <td>{{ $product->name }}</td>
+                                    <td></td>
                                     <td>
-                                        <a href="" class="btn btn-info">Edit</a>
+                                        <a href="{{ route('edit.products', $product->id) }}" class="btn btn-info">Edit</a>
                                         <a href="" class="btn btn-danger">Delete</a>
                                     </td>
                                 </tr>

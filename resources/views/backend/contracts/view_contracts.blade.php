@@ -29,10 +29,11 @@
                                 <tr>
                                     <td>{{ $key+1 }}</td>
                                     <td>{{ $contract->name }}</td>
+                                    <td>{{ $contract['provider']['name'] }}</td>
                                     <td>{{ date('d-m-Y', strtotime($contract->date)) }}</td>
-                                    <td></td>
+                                    <th> - </th>
                                     <td>
-                                        <a href="" class="btn btn-info">Edit</a>
+                                        <a href="{{ route('edit.contracts', $contract->id ) }}" class="btn btn-info">Edit</a>
                                         <a href="" class="btn btn-danger">Delete</a>
                                     </td>
                                 </tr>
