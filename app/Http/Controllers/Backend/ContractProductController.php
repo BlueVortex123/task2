@@ -19,10 +19,14 @@ class ContractProductController extends Controller
         return view('backend.add_contract_product', $data);
     }
 
-    public function StoreContractProduct(Request $request)
+    public function StoreContractProduct(Request $request,$id)
     {
     
-      
+        $contract = Contract::with(['products'])->where('id',$id)->first();
+        dd($contract->toArray());
+        
+        $attach = $contract->products()->attach();
+        $deattach = $contract->products()->dettach();
        
      
     }

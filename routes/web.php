@@ -51,6 +51,6 @@ Route::prefix('/products')->group(function(){
     });
 
 Route::get('contract-product/add', [ContractProductController::class, 'AddContractProduct'])->name('add.contract.product');
-Route::post('contract-product/store', [ContractProductController::class, 'StoreContractProduct'])->name('store.contract.product');
+Route::post('contract-product/store/{id}', [ContractProductController::class, 'StoreContractProduct'])->name('store.contract.product');
 Route::get('contract-product/edit/{$id}', [ContractProductController::class, 'EditContractProduct'])->name('edit.contract.product');
 Route::post('contract-product/update/{$id}', [ContractProductController::class, 'UpdateContractProduct'])->name('update.contract.product');

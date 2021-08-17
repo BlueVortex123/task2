@@ -15,6 +15,8 @@ class ContractController extends Controller
         $data['providers'] = Provider::all();
         $data['contracts'] = Contract::with(['products'])->get();
 
+       
+
         return view('backend.contracts.view_contracts',$data);
 
     }
@@ -47,6 +49,7 @@ class ContractController extends Controller
     {
         $data['editData'] = Contract::with(['provider'])->where('id',$id)->first();
         $data['providers'] = Provider::all();
+
         // dd($data['editData']->toArray());
         return view('backend.contracts.edit_contracts', $data);
     }

@@ -26,20 +26,24 @@
                             </thead>
                             <tbody>
                                 @foreach($contracts as $key => $contract )
-                                    @foreach($contract->products as $product)
+                                
                                 <tr>
                                     <td>{{ $key+1 }}</td>
                                     <td>{{ $contract->name }}</td>
                                     <td>{{ $contract['provider']['name'] }}</td>
                                     <td>{{ date('d-m-Y', strtotime($contract->date)) }}</td>
-                                    <th>{{ $product->name }}</th>
+                                    <td>
+                                        @foreach($contract->products as $product)
+                                        <span>{{ $product->name }}</span>
+                                        @endforeach
+                                    </td>
                                     <td>
                                         <a href="{{ route('edit.contracts', $contract->id ) }}" class="btn btn-info">Edit</a>
                                         <a href="{{ route('delete.contracts', $contract->id) }}" class="btn btn-danger">Delete</a>
                                     </td>
                                 </tr>
                                 @endforeach
-                                @endforeach
+                                
                             </tbody>
                         </table>
                     </div>
