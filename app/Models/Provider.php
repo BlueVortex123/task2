@@ -9,7 +9,7 @@ class Provider extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['name','email'];
 
     public function contracts()
     {
