@@ -18,6 +18,7 @@ class CreateContractsTable extends Migration
             $table->integer('provider_id');
             $table->string('name');
             $table->date('date');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

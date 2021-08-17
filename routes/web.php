@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Backend\ContractController;
+use App\Http\Controllers\Backend\ContractProductController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\ProviderController;
 use Illuminate\Support\Facades\Route;
@@ -39,7 +40,7 @@ Route::prefix('/contract')->group(function(){
     
     });
 
-    Route::prefix('/products')->group(function(){
+Route::prefix('/products')->group(function(){
     Route::get('/product/view', [ProductController::class, 'ViewProducts'])->name('view.products');
     Route::get('/product/add', [ProductController::class, 'AddProducts'])->name('add.products');
     Route::post('/product/store', [ProductController::class, 'StoreProducts'])->name('store.products');
@@ -48,3 +49,8 @@ Route::prefix('/contract')->group(function(){
     Route::get('/product/delete/{id}', [ProductController::class, 'DeleteProducts'])->name('delete.products');
     
     });
+
+Route::get('contract-product/add', [ContractProductController::class, 'AddContractProduct'])->name('add.contract.product');
+Route::post('contract-product/store', [ContractProductController::class, 'StoreContractProduct'])->name('store.contract.product');
+Route::get('contract-product/edit/{$id}', [ContractProductController::class, 'EditContractProduct'])->name('edit.contract.product');
+Route::post('contract-product/update/{$id}', [ContractProductController::class, 'UpdateContractProduct'])->name('update.contract.product');

@@ -14,6 +14,9 @@
       <li class="nav-item">
         <a class="nav-link" href="{{ route('view.products') }}">Products</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ route('add.contract.product') }}">Contract-Product</a>
+      </li>
     </ul>
   </div>
 </nav>

@@ -12,7 +12,7 @@ class ProductController extends Controller
     public function ViewProducts()
     {
         $data['products'] = Product::with(['contracts'])->get();
-        // dd($data['products']->toArray());
+        //  ddd($data['products']->toArray());
         return view('backend.products.view_products',$data);
     }
 

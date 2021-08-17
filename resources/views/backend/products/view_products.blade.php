@@ -24,15 +24,19 @@
                             </thead>
                             <tbody>
                                 @foreach($products as $key => $product )
+                                    @foreach($product->contracts as $contract)
                                 <tr>
                                     <td>{{ $key+1 }}</td>
                                     <td>{{ $product->name }}</td>
-                                    <td></td>
+                                    <td>{{ $contract->name  }}</td>
+                                   
+                                    
                                     <td>
                                         <a href="{{ route('edit.products', $product->id) }}" class="btn btn-info">Edit</a>
                                         <a href="{{ route('delete.products', $product->id ) }}" class="btn btn-danger">Delete</a>
                                     </td>
                                 </tr>
+                                @endforeach
                                 @endforeach
                             </tbody>
                         </table>

@@ -14,7 +14,6 @@ class ContractController extends Controller
     {
         $data['providers'] = Provider::all();
         $data['contracts'] = Contract::with(['products'])->get();
-        // ddd($data['contracts']->toArray());
 
         return view('backend.contracts.view_contracts',$data);
 
