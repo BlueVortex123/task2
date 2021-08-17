@@ -35,6 +35,7 @@ Route::prefix('/contract')->group(function(){
     Route::post('/contract/store', [ContractController::class, 'StoreContracts'])->name('store.contracts');
     Route::get('/contract/edit/{id}', [ContractController::class, 'EditContracts'])->name('edit.contracts');
     Route::post('/contract/update/{id}', [ContractController::class, 'UpdateContracts'])->name('update.contracts');
+    Route::get('/contract/delete/{id}', [ContractController::class, 'DeleteContracts'])->name('delete.contracts');
     
     });
 
@@ -44,5 +45,6 @@ Route::prefix('/contract')->group(function(){
     Route::post('/product/store', [ProductController::class, 'StoreProducts'])->name('store.products');
     Route::get('/product/edit/{id}', [ProductController::class, 'EditProducts'])->name('edit.products');
     Route::post('/product/update/{id}', [ProductController::class, 'UpdateProducts'])->name('update.products');
+    Route::get('/product/delete/{id}', [ProductController::class, 'DeleteProducts'])->name('delete.products');
     
     });

@@ -30,7 +30,7 @@
                                     <td></td>
                                     <td>
                                         <a href="{{ route('edit.products', $product->id) }}" class="btn btn-info">Edit</a>
-                                        <a href="" class="btn btn-danger">Delete</a>
+                                        <a href="{{ route('delete.products', $product->id ) }}" class="btn btn-danger">Delete</a>
                                     </td>
                                 </tr>
                                 @endforeach
