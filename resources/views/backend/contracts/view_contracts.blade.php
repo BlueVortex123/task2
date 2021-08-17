@@ -8,7 +8,7 @@
                 <div class="pull-right"><h4>Task 2</h4></div>
             </div>
             <div class="pull-right">
-                <a href="" class="btn btn-success">Store new Contract</a>
+                <a href="{{ route('add.contracts') }}" class="btn btn-success">Store new Contract</a>
             </div>
         </div>
 
@@ -20,20 +20,24 @@
                         <th>Name</th>
                         <th>Provider</th>
                         <th>Date</th>
+                        <th>Products</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach($contracts as $key => $contract )
                     <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>{{ $key+1 }}</td>
+                        <td>{{ $contract->name }}</td>
+                        <td>{{ $cotnract['provider']['name'] }}</td>
+                        <td>{{ date('d-m-Y', strtotime($contract->date)) }}</td>
                         <td></td>
                         <td>
-                            <a href="" class="btn btn-info">Edit</a>
-                            <a href="" class="btn btn-danger">Delete</a>
+                            <a href="#" class="btn btn-info">Edit</a>
+                            <a href="#" class="btn btn-danger">Delete</a>
                         </td>
                     </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -41,4 +45,4 @@
 </div>
 
         
-@section('content')
+@endsection()
