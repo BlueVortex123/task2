@@ -42,6 +42,24 @@
                             </div>  
                         </div>
                     </div>   
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <h5>Products Name <span class="text-danger">*</span></h5>
+                                <div class="controls">
+                                    <select name="product_id[]" multiple=""  required="" class="form-control">
+                                        <option value="" selected="" disabled="">Select the products</option>
+                                        @foreach($products as $product)
+                                        <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                        @endforeach
+                                    </select>                                    
+                                </div>
+                            </div>  
+                        </div>
+                    </div>   
+
                    
                   
                     <div class="row">

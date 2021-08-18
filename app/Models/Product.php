@@ -17,4 +17,9 @@ class Product extends Model
     {
         return $this->belongsToMany(Contract::class,'contract_product', 'product_id', 'contract_id');
     }
+
+    public function logs()
+    {
+        return $this->morphMany(Log::class,'models_log');
+    }
 }

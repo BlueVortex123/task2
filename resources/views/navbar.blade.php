@@ -9,13 +9,10 @@
         <a class="nav-link" href="{{ route('view.providers') }}">Providers</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{{ route('view.contracts') }}">Contracts</a>
-      </li>
-      <li class="nav-item">
         <a class="nav-link" href="{{ route('view.products') }}">Products</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{{ route('add.contract.product') }}">Contract-Product</a>
+        <a class="nav-link" href="{{ route('view.contracts') }}">Contracts</a>
       </li>
     </ul>
   </div>

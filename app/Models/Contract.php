@@ -21,6 +21,11 @@ class Contract extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Product::class,'contract_product','contract_id','product_id');
+        return $this->belongsToMany(Product::class,'contract_product','contract_id','product_id')->withTimestamps();
+    }
+
+    public function logs()
+    {
+        return $this->morphMany(Log::class,'models_log');
     }
 }

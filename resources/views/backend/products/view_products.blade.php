@@ -29,7 +29,7 @@
                                     <td>{{ $product->name }}</td>
                                     <th>
                                         @foreach($product->contracts as $contract)
-                                        <span>{{ $product->name }}</span>
+                                        <span>{{ $contract->name }}</span>
                                         @endforeach
                                     </th>
                                     
