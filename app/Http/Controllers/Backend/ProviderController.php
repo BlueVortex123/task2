@@ -30,24 +30,39 @@ class ProviderController extends Controller
 
     public function StoreProvider(Request $request)
     {
+        $provider_model = Provider::class;
+        $operation = 'store';
+        
         $validateData = $request->validate([
             'name' => 'required',
             'email' => 'required',
         ]);
+
         $provider = new Provider();
-        $provider->id= $request->id;
         $provider->name= $request->name;
         $provider->email= $request->email;
-    
-        $provider_model = 'App\Models\Provider';
         
-        FacadesLog::info([
-            'models_log_id' => $provider->id,
-            'models_log_type' => $provider_model,
-            'operation' => 'store',
-        ]);
-       
         $provider->save();
+        
+        $provider_id= $provider->id;
+        
+        $log = new Log([
+            'model_log_id' => $provider_id,
+            'model_log_type' => $provider_model,
+            'operation' => $operation,
+        ]);
+        
+        $log->logs()->associate($provider)->save();
+        
+        FacadesLog::channel('custom_providers')->info([
+
+            'model id' => $provider->id,
+            'model name' => $provider_model,
+            'action' => $operation,
+            'created at: ' => date('d-m-Y',strtotime($provider->created_at)),
+
+        ]); 
+       
         return redirect()->route('view.providers');   
         
         // $data['providers'] = Provider::with(['logs'])->first();
@@ -56,16 +71,26 @@ class ProviderController extends Controller
 
     public function EditProvider($id)
     {
+        $provider_model = Provider::class;
+        $operation = 'edit';
         $data['editData'] = Provider::find($id);
-        $provider = Provider::find($id);
+        $provider_id = $data['editData']->id;
 
-        $provider_model = 'App\Models\Provider';
+        
+        $log = new Log([
+            'model_log_id' => $provider_id,
+            'model_log_type' => $provider_model,
+            'operation' => $operation,
+        ]);
 
+        $log->logs()->associate($data['editData'])->save();
         // $provider_name = $provider::where('id',$id)->first();
-        FacadesLog::info([
-            'models_log_id' => $provider->id,
-            'models_log_type' => $provider_model,
-            'operation' => 'edit'
+       
+
+        FacadesLog::channel('custom_providers')->info([
+            'model id' => $provider_id,
+            'model name' => $provider_model,
+            'action' => $operation
         ]);
         
         //  dd($data['editData']->toArray());
@@ -74,16 +99,32 @@ class ProviderController extends Controller
 
     public function UdpateProvider(Request $request,$id)
     {
-        $provider_model = 'App\Models\Provider';
+        $provider_model = Provider::class;        
+        $operation = 'update';
+      
         $provider = Provider::find($id);
         $provider->name= $request->name;
         $provider->email= $request->email;
         $provider->save();
 
-        FacadesLog::info([
-            'models_log_id' => $provider->id,
-            'models_log_type' => $provider_model,
-            'operation' => 'update'
+        $provider_id = $provider->id;
+
+        $log = new Log([
+            'model_log_id' => $provider_id,
+            'model_log_type' => $provider_model,
+            'operation' => $operation,
+        ]);
+
+        $log->logs()->associate($provider)->save();
+        // $provider_name = $provider::where('id',$id)->first();
+       
+
+        FacadesLog::channel('custom_providers')->info([
+            'model id' => $provider_id,
+            'model name' => $provider_model,
+            'action' => $operation,
+            'updated at: ' =>  date('d-m-Y',strtotime($provider->deleted_at)),
+
         ]);
 
         return redirect()->route('view.providers');   
@@ -91,16 +132,33 @@ class ProviderController extends Controller
 
     public function DeleteProvider($id)
     {
-        $provider_model = 'App\Models\Provider';
-        $provider = Provider::find($id);
-        $provider->delete();
+        $provider_model = Provider::class; 
+        $operation = 'destroy';
 
         $provider = Provider::find($id);
-        FacadesLog::info([
-            'models_log_id' => $provider->id,
-            'models_log_type' => $provider_model,
-            'operation' => 'delete'
+        $provider->delete();
+        
+        $provider_id = $provider->id;
+        
+        $log = new Log([
+            'model_log_id' => $provider_id,
+            'model_log_type' => $provider_model,
+            'operation' => $operation,
         ]);
+        
+        $log->logs()->associate($provider)->save();
+        // $provider_name = $provider::where('id',$id)->first();
+        
+
+        FacadesLog::channel('custom_providers')->info([
+
+            'model id' => $provider_id,
+            'model name' => $provider_model,
+            'action' => $operation,
+            'deleted at: ' =>  date('d-m-Y',strtotime($provider->deleted_at)),
+
+        ]);
+
 
         return redirect()->route('view.providers');   
 

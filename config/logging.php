@@ -37,7 +37,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['custom'],
+            'channels' => ['custom_provider', 'custom_contracts','custom_products'],
             'ignore_exceptions' => false,
         ],
 
@@ -105,6 +105,22 @@ return [
             'driver' => 'single',
             'level' => 'debug',
             'path' => storage_path('logs/custom.log'),
+        ],
+        
+        'custom_providers' => [
+            'driver' => 'single',
+            'level' => 'debug',
+            'path' => storage_path('logs/providers.log'),
+        ],
+        'custom_contracts' => [
+            'driver' => 'single',
+            'level' => 'debug',
+            'path' => storage_path('logs/contracts.log'),
+        ],
+        'custom_products' => [
+            'driver' => 'single',
+            'level' => 'debug',
+            'path' => storage_path('logs/products.log'),
         ],
     ],
 
