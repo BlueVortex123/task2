@@ -22,6 +22,7 @@ class Contract extends Model
     public function products()
     {
         return $this->belongsToMany(Product::class,'contract_product','contract_id','product_id')->withTimestamps();
+        // ->withPivot('id')
     }
 
     public function logs()

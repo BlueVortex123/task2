@@ -60,7 +60,7 @@ class ContractController extends Controller
             'operation' => $operation,
         ]);
         
-        $log->logs()->associate($contract)->save();
+        $log->logs()->sync($contract)->save();
         
         FacadesLog::channel('custom_contracts')->info([
             'model id' => $contract->id,
@@ -82,7 +82,7 @@ class ContractController extends Controller
         $data['editData'] = Contract::with(['provider'])->with(['products'])->where('id',$id)->first();
         $data['products'] = Product::all();
         $data['providers'] = Provider::all();
-    
+       
 
         $contract_id= $data['editData']->id;
         
@@ -121,7 +121,8 @@ class ContractController extends Controller
         $contract->date = $request->date;
         $contract->save();
         
-       
+        $contract->products()->sync($request->product_id);
+
  
         $contract_id = $contract->id;
 
@@ -184,4 +185,7 @@ class ContractController extends Controller
         
         return redirect()->route('view.contracts');
     }
+
+   
+
 }

@@ -48,12 +48,9 @@
                             <div class="form-group">
                                 <h5>Products Name <span class="text-danger">*</span></h5>
                                 <div class=" select is-multiple controls">
-                                    <select name="product_id[]" id="products" multiple  required="" class="form-control" enctype="multipart/form-data">
-                                        @foreach($products as $product)
-                                        <option value="{{ $product->id }}" 
-                                            {{ in_array($product->name , $selectedProducts) ? 'selected' : '' }}
-                                         
-                                            {{ $product->name }}</option>
+                                    <select name="product_id[]" id="products" multiple="multiple"  required="" class="form-control" enctype="multipart/form-data">
+                                        @foreach($products  as $product)
+                                        <option value="{{ $product->id }}"  @if($product->contracts->containsStrict('id', $editData->id)) selected="selected" @endif> {{ $product->name }} </option>
                                         @endforeach
                                     </select>                                    
                                 </div>
@@ -71,7 +68,9 @@
                                     </div>
                                 </div> 
                             </div>
-                        </div>
+                    </div>
+
+                     
                     
 
                     <div class="text-xs-right">

@@ -49,8 +49,3 @@ Route::prefix('/products')->group(function(){
     Route::get('/product/delete/{id}', [ProductController::class, 'DeleteProducts'])->name('delete.products');
     
     });
-
-Route::get('contract-product/add', [ContractProductController::class, 'AddContractProduct'])->name('add.contract.product');
-Route::post('contract-product/store/', [ContractProductController::class, 'StoreContractProduct'])->name('store.contract.product');
-Route::get('contract-product/edit/{contract_id}', [ContractProductController::class, 'EditContractProduct'])->name('edit.contract.product');
-Route::post('contract-product/update/{contract_id}', [ContractProductController::class, 'UpdateContractProduct'])->name('update.contract.product');
