@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\Backend\ContractController;
-use App\Http\Controllers\Backend\ContractProductController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\ProviderController;
 use Illuminate\Support\Facades\Route;
@@ -18,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return redirect('/provider/providers/view');
+    return view('welcome');
 });
 
 Route::prefix('/provider')->group(function(){
@@ -30,15 +28,13 @@ Route::prefix('/provider')->group(function(){
     Route::get('/providers/delete/{id}', [ProviderController::class, 'DeleteProvider'])->name('delete.providers');
 });
 
-Route::prefix('/contract')->group(function(){
-    Route::get('/contract/view', [ContractController::class, 'ViewContracts'])->name('view.contracts');
-    Route::get('/contract/add', [ContractController::class, 'AddContracts'])->name('add.contracts');
-    Route::post('/contract/store', [ContractController::class, 'StoreContracts'])->name('store.contracts');
-    Route::get('/contract/edit/{id}', [ContractController::class, 'EditContracts'])->name('edit.contracts');
-    Route::post('/contract/update/{id}', [ContractController::class, 'UpdateContracts'])->name('update.contracts');
-    Route::get('/contract/delete/{id}', [ContractController::class, 'DeleteContracts'])->name('delete.contracts');
-    
-    });
+// Contracts Routes
+Route::resource('/contracts', App\Http\Controllers\Backend\ContractController::class)->except('show');
+Route::get('backend/contracts/trashed', [App\Http\Controllers\Backend\ContractController::class, 'onlyTrashedContracts'])->name('trashed_contracts');
+Route::get('backend/contracts.restore/{id}', [App\Http\Controllers\Backend\ContractController::class, 'restoreContracts'])->name('restore_contracts');
+Route::get('backend/contracts/permanentlyDelete/{id}', [App\Http\Controllers\Backend\ContractController::class, 'permanentlyDeleteContracts'])->name('permanently_delete_contracts');
+
+
 
 Route::prefix('/products')->group(function(){
     Route::get('/product/view', [ProductController::class, 'ViewProducts'])->name('view.products');
@@ -47,5 +43,7 @@ Route::prefix('/products')->group(function(){
     Route::get('/product/edit/{id}', [ProductController::class, 'EditProducts'])->name('edit.products');
     Route::post('/product/update/{id}', [ProductController::class, 'UpdateProducts'])->name('update.products');
     Route::get('/product/delete/{id}', [ProductController::class, 'DeleteProducts'])->name('delete.products');
-    
-    });
+});
+
+Route::get('backend/activities/activity', [App\Http\Controllers\LogController::class, 'index'])->name('activity');
+Route::get('backend/activities/list/{model_type}', [App\Http\Controllers\LogController::class, 'getActivity'])->name('list_activity');

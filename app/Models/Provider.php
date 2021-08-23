@@ -2,24 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\RecordsActivity;
+use App\Traits\ActivityScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Provider extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
+    use SoftDeletes, RecordsActivity, ActivityScope;
 
-    protected $fillable = ['name','email'];
+    protected $fillable = [
+        'name',
+        'email'
+    ];
 
     public function contracts()
     {
-        return $this -> hasMany(Contract::class, 'provider_id','id');
-    }
-
-    public function log()
-    {
-        return $this->morphMany(Log::class,'models_log');
+        return $this->hasMany(Contract::class);
     }
 }

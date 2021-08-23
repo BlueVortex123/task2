@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Contract;
-use App\Models\ContractProduct;
 use App\Models\Product;
 use App\Models\Provider;
 use Illuminate\Http\Request;
@@ -13,179 +12,89 @@ use Illuminate\Support\Facades\Log as FacadesLog;
 
 class ContractController extends Controller
 {
-    public function ViewContracts()
+    public function index()
     {
-        $data['providers'] = Provider::all();
-        $data['contracts'] = Contract::with(['products'])->with(['logs'])->get();
-        
-        return view('backend.contracts.view_contracts',$data);
+        $contracts = Contract::with(['products', 'provider'])->get();
+        return view('backend.contracts.view_contracts', compact('contracts'));
 
     }
 
-    public function AddContracts()
+    public function create()
     {
-        $data['providers'] = Provider::all();
-        $data['products'] = Product::all();
-        return view('backend.contracts.add_contracts',$data);
-
+        $providers = Provider::with('contracts')->get();
+        $products = Product::with('contracts')->get();
+        return view('backend.contracts.add_contracts', compact('providers', 'products'));
     }
 
-    public function StoreContracts(Request $request)
+    public function store(Request $request)
     {
-        $contract_model = 'App\Models\Contract';
-        $operation = 'store';
-
-      
-        $validateData = $request->validate([
-            'name' => 'required',
+        $validated = $request->validate([
+            'name' => 'required|string|min:3|max:255',
             'date' => 'required',
         ]);
-
-        $products = Product::all();
-        $products->product_id = $request->product_id;
        
-        $contract = new Contract();
+        $contract = new Contract($validated);
         $contract->provider_id = $request->provider_id;
-        $contract->name = $request->name;
-        $contract->date = $request->date;
         $contract->save();
         
-        $contract->products()->attach($request->product_id);
+        $contract->products()->sync(request('products'));
 
-        $contract_id= $contract->id;
-        
-        $log = new Log([
-            'model_log_id' => $contract_id,
-            'model_log_type' => $contract_model,
-            'operation' => $operation,
-        ]);
-        
-        $log->logs()->sync($contract)->save();
-        
-        FacadesLog::channel('custom_contracts')->info([
-            'model id' => $contract->id,
-            'model name' => $contract_model,
-            'action' => $operation,
-            'created at: ' => date('d-m-Y',strtotime($contract->created_at)),
-
-        ]); 
-
-        return redirect()->route('view.contracts');
+        return redirect()->route('contracts.index');
     }
 
-    public function EditContracts($id)
+    public function edit(Contract $contract)
     {
-        $contract_model = Contract::class;
-        $operation = 'edit';
-        
-        
-        $data['editData'] = Contract::with(['provider'])->with(['products'])->where('id',$id)->first();
-        $data['products'] = Product::all();
-        $data['providers'] = Provider::all();
-       
+        $providers = Provider::with('contracts')->get();
+        $products = Product::with('contracts')->get();
+        $selected_products = [];
+        foreach ($contract->products as $sel_prod)
+        {
+            array_push($selected_products, $sel_prod->id);
+        }
 
-        $contract_id= $data['editData']->id;
-        
-        $log = new Log([
-            'model_log_id' => $contract_id,
-            'model_log_type' => $contract_model,
-            'operation' => $operation,
-        ]);
-        
-        $log->logs()->associate($data['editData'])->save();
-        
-        FacadesLog::channel('custom_contracts')->info([
-            'model id' => $data['editData']->id,
-            'model name' => $contract_model,
-            'action' => $operation,
-        ]); 
-        
-        // $data['selectedProducts'] = $data['editData']->products()->pluck('name')->toArray();
-
-        return view('backend.contracts.edit_contracts', $data);
+        return view('backend.contracts.edit_contracts', compact('contract', 'providers', 'products', 'selected_products'));
         
     }
 
-    public function UpdateContracts(Request $request, $id)
+    public function update(Request $request, Contract $contract)
     {
-        $contract_model = Contract::class;
-        $operation = 'update';
-        
-        $products = Product::all();
-        $products->product_id = $request->product_id;
-        
-        $contract = Contract::find($id);
-        $contract_id = $contract->id;
+        $validated = $request->validate([
+            'name' => 'required|string|min:3|max:255',
+            'date' => 'required',
+        ]);
+       
+        $contract->update($validated);
         $contract->provider_id = $request->provider_id;
-        $contract->name = $request->name;
-        $contract->date = $request->date;
         $contract->save();
         
-        $contract->products()->sync($request->product_id);
+        $contract->products()->sync(request('products'));
 
- 
-        $contract_id = $contract->id;
-
-        $log = new Log([
-            'model_log_id' => $contract_id,
-            'model_log_type' => $contract_model,
-            'operation' => $operation,
-        ]);
-
-        $log->logs()->associate($contract)->save();
-        // $provider_name = $provider::where('id',$id)->first();
-       
-
-        FacadesLog::channel('custom_contracts')->info([
-            'model id' => $contract_id,
-            'model name' => $contract_model,
-            'action' => $operation,
-            'updated at: ' =>  date('d-m-Y',strtotime($contract->updated_at)),
-
-        ]);
-        
-     
-        return redirect()->route('view.contracts');
-     
-     
-        // $contract->products()->attach($request->product_id);
-        // $contract->products()->dettach($request->product_id);
-        // $contract_name = $contract::where('id',$id)->first();
+        return redirect()->route('contracts.index');
         
     }
     
-    public function DeleteContracts($id)
+    public function destroy(Contract $contract)
     {
-        $contract_model = Contract::class;
-        $operation = 'destroy';
-
-        $contract = Contract::find($id);
         $contract->delete();
-
-
-        $contract_id = $contract->id;
-        
-        $log = new Log([
-            'model_log_id' => $contract_id,
-            'model_log_type' => $contract_model,
-            'operation' => $operation,
-        ]);
-        
-        $log->logs()->associate($contract)->save();
-        // $provider_name = $provider::where('id',$id)->first();
-        
-
-        FacadesLog::channel('custom_contracts')->info([
-            'model id' => $contract_id,
-            'model name' => $contract_model,
-            'action' => $operation,
-            'deleted at: ' =>  date('d-m-Y',strtotime($contract->deleted_at)),
-
-        ]);
-        
-        return redirect()->route('view.contracts');
+        return redirect()->route('contracts.index');
+    }
+    
+    public function onlyTrashedContracts()
+    {
+        $contracts = Contract::onlyTrashed()->whereNotNull('deleted_at')->get();
+        return view('backend.contracts.trashed', compact('contracts'));
     }
 
-   
+    public function restoreContracts(Request $request, $id)
+    {
+        Contract::onlyTrashed()->find($id)->restore();
+        return redirect()->route('trashed_contracts');
+    }
+
+    public function permanentlyDeleteContracts(Request $request, $id)
+    {
+        Contract::onlyTrashed()->find($id)->forceDelete();
+        return redirect()->route('trashed_contracts');
+    }
 
 }

@@ -14,15 +14,12 @@ class ContractProductTable extends Migration
     public function up()
     {
         Schema::create('contract_product', function (Blueprint $table) {
-
-            $table->unsignedBigInteger('contract_id')->unsigned()->index()->nullable();
-            $table->foreign('contract_id')->references('id')->on('contracts')->onDelete('cascade');
+            $table->unsignedBigInteger('contract_id');
+            $table->unsignedBigInteger('product_id');
             
-            
-            $table->unsignedBigInteger('product_id')->unsigned()->index()->nullable();
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->foreign('contract_id')->references('id')->on('contracts')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('product_id')->references('id')->on('products')->onUpdate('cascade')->onDelete('cascade');
            
-
             $table->timestamps();
         });
     }

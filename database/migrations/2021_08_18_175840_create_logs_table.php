@@ -15,8 +15,9 @@ class CreateLogsTable extends Migration
     {
         Schema::create('logs', function (Blueprint $table) {
             $table->id();
-            $table->enum('operation',['index','create','store','edit','update','destroy','custom']);
-            $table->morphs('models_log');
+            $table->unsignedBigInteger('subject_id');
+            $table->string('subject_type');
+            $table->string('name');
             $table->timestamps();
         });
     }

@@ -2,24 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\RecordsActivity;
+use App\Traits\ActivityScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
+    use SoftDeletes, RecordsActivity, ActivityScope;
 
     protected $fillable = ['name'];
 
     public function contracts()
     {
-        return $this->belongsToMany(Contract::class,'contract_product', 'product_id', 'contract_id');
-    }
-
-    public function logs()
-    {
-        return $this->morphMany(Log::class,'models_log');
+        return $this->belongsToMany(Contract::class);
     }
 }

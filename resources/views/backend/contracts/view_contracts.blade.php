@@ -1,19 +1,20 @@
-@extends('layout')
+@extends('layouts.app')
 
 @section('content')
-
-<div class="row">
-        <div class="col-12">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
                     <h1>Contracts</h1>
                     <div class="float-right">
-                        <a href="{{ route('add.contracts') }}" class="btn btn-success">Store new Contract</a>
+                        <a href="{{ route('contracts.create') }}" class="btn btn-success">Store new Contract</a>
                     </div>
                 </div>
+                
                 <div class="card-body">
                     <div class="table-responsive">
-                                <table class="table table-bordered">
+                        <table class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -25,31 +26,34 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($contracts as $key => $contract )
-                                
-                                <tr>
-                                    <td>{{ $key+1 }}</td>
-                                    <td>{{ $contract->name }}</td>
-                                    <td>{{ $contract['provider']['name'] }}</td>
-                                    <td>{{ date('d-m-Y', strtotime($contract->date)) }}</td>
-                                    <td>
-                                        @foreach($contract->products as $product)
-                                        <span>{{ $product->name }}</span>
-                                        @endforeach
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('edit.contracts', $contract->id ) }}" class="btn btn-info">Edit</a>
-                                        <a href="{{ route('delete.contracts', $contract->id) }}" class="btn btn-danger">Delete</a>
-                                    </td>
-                                </tr>
+                                @foreach($contracts as $contract)
+                                    <tr>
+                                        <td>{{ $contract->id }}</td>
+                                        <td>{{ $contract->name }}</td>
+                                        <td>{{ $contract->provider->name }}</td>
+                                        <td>{{ $contract->created_at->format('d-m-Y') }}</td>
+                                        <td>
+                                            @foreach($contract->products as $product)
+                                                <span>{{ $product->name }}</span>
+                                            @endforeach
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('contracts.edit', $contract) }}" class="btn btn-primary float-left">Edit</a>
+                                            <form action="{{ route('contracts.destroy', $contract) }}" method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger float-right">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
                                 @endforeach
-                                
                             </tbody>
                         </table>
+                        <a href="{{ route('trashed_contracts') }}" class="btn btn-secondary float-right">Trash</a>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-            
-@endsection()
+    </div> 
+</div>
+@endsection

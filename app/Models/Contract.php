@@ -2,31 +2,28 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\RecordsActivity;
+use App\Traits\ActivityScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Contract extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
+    use SoftDeletes, RecordsActivity, ActivityScope;
 
-    protected $fillable = [ 'provider_id', 'name', 'date'];
+    protected $fillable = [
+        'provider_id',
+        'name',
+        'date'
+    ];
 
     public function provider()
     {
-        return $this->belongsTo(Provider::class, 'provider_id', 'id');
-
+        return $this->belongsTo(Provider::class, 'provider_id');
     }
 
     public function products()
     {
-        return $this->belongsToMany(Product::class,'contract_product','contract_id','product_id')->withTimestamps();
-        // ->withPivot('id')
-    }
-
-    public function logs()
-    {
-        return $this->morphMany(Log::class,'models_log');
+        return $this->belongsToMany(Product::class);
     }
 }
