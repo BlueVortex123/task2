@@ -31,16 +31,13 @@ Route::get('backend/contracts/trashed', [App\Http\Controllers\Backend\ContractCo
 Route::get('backend/contracts.restore/{id}', [App\Http\Controllers\Backend\ContractController::class, 'restoreContracts'])->name('restore_contracts');
 Route::get('backend/contracts/permanentlyDelete/{id}', [App\Http\Controllers\Backend\ContractController::class, 'permanentlyDeleteContracts'])->name('permanently_delete_contracts');
 
+// Product Routes
+Route::resource('/products', App\Http\Controllers\Backend\ProductController::class)->except('show');
+Route::get('backend/products/trashed', [App\Http\Controllers\Backend\ProductController::class, 'onlyTrashedProducts'])->name('trashed_products');
+Route::get('backend/products.restore/{id}', [App\Http\Controllers\Backend\ProductController::class, 'restoreProducts'])->name('restore_products');
+Route::get('backend/products/permanentlyDelete/{id}', [App\Http\Controllers\Backend\ProductController::class, 'permanentlyDeleteProducts'])->name('permanently_delete_products');
 
 
-Route::prefix('/products')->group(function(){
-    Route::get('/product/view', [ProductController::class, 'ViewProducts'])->name('view.products');
-    Route::get('/product/add', [ProductController::class, 'AddProducts'])->name('add.products');
-    Route::post('/product/store', [ProductController::class, 'StoreProducts'])->name('store.products');
-    Route::get('/product/edit/{id}', [ProductController::class, 'EditProducts'])->name('edit.products');
-    Route::post('/product/update/{id}', [ProductController::class, 'UpdateProducts'])->name('update.products');
-    Route::get('/product/delete/{id}', [ProductController::class, 'DeleteProducts'])->name('delete.products');
-});
 
 Route::get('backend/activities/activity', [App\Http\Controllers\LogController::class, 'index'])->name('activity');
 Route::get('backend/activities/list/{model_type}', [App\Http\Controllers\LogController::class, 'getActivity'])->name('list_activity');

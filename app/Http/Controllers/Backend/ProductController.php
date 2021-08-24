@@ -7,150 +7,77 @@ use App\Models\Contract;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\Log;
-use Illuminate\Support\Facades\Log as FacadesLog;
-
 class ProductController extends Controller
 {
 
-    public function ViewProducts()
+    public function index()
     {
-        $data['products'] = Product::with(['contracts'])->get();
-        //  ddd($data['products']->toArray());
-        return view('backend.products.view_products',$data);
+        $products = Product::with('contracts')->get();
+        //  dd($products->toArray());
+        return view('backend.products.view_products',compact('products'));
     }
 
-    public function AddProducts()
+    public function create()
     {
         return view('backend.products.add_products');
     }
 
-    public function StoreProducts(Request $request)
+    public function store(Request $request)
     {
-        $product_model = Product::class;
-        $operation = 'store';
-
-
-        $validateData = $request->validate([
-            'name' => 'required',
+        $validated = $request->validate([
+            'name' => 'required|string',
         ]);
-
-        $product = new Product();
+        
+        $product = new Product($validated);
         $product->name = $request->name;
         $product->save();
-
-       
-        $product_id = $product->id;
         
-        $log = new Log([
-            'model_log_id' => $product_id,
-            'model_log_type' => $product_model,
-            'operation' => $operation,
-        ]);
         
-        $log->logs()->associate($product)->save();
-        
-        FacadesLog::channel('custom_products')->info([
-            'model id' => $product->id,
-            'model name' => $product_model,
-            'action' => $operation,
-            'created at: ' => date('d-m-Y',strtotime($product->created_at)),
-
-        ]); 
-
-       
-
-        return redirect()->route('view.products');
+        return redirect()->route('products.index');
     }
-
-    public function EditProducts($id)
+    
+    public function edit(Product $product)
     {
-        $product_model = Product::class;
-        $operation = 'edit';
-
-        $data['editData'] = Product::find($id);
-        $product_id = $data['editData']->id;
+        // $products = Product::with('contracts')->get();
         
-        // $product_name = $data['editData']::where('id',$id)->first();
-
-        
-        $log = new Log([
-            'model_log_id' => $product_id,
-            'model_log_type' => $product_model,
-            'operation' => $operation,
-        ]);
-
-        $log->logs()->associate($data['editData'])->save();
-
-        FacadesLog::channel('custom_products')->info([
-            'model id' => $product_id,
-            'model name' => $product_model,
-            'action' => $operation,
-            
-        ]);
-
-        return view ('backend.products.edit_products', $data);
+        return view ('backend.products.edit_products', compact('product'));
     }
-
-    public function UpdateProducts(Request $request, $id)
+    
+    public function update(Request $request, Product $product)
     {
-        $product_model = Product::class;
-        $operation = 'update';
-
-        $product = Product::find($id);
-        $product->name = $request->name;
+        $validated = $request->validate([
+            'name' => 'required|string',
+        ]);
+        
+        $product->update($validated);
         $product->save();
-
-
-        $product_id = $product->id;
-
-        $log = new Log([
-            'model_log_id' => $product_id,
-            'model_log_type' => $product_model,
-            'operation' => $operation,
-        ]);
-
-        $log->logs()->associate($product)->save();
-        // $provider_name = $provider::where('id',$id)->first();
-       
-
-        FacadesLog::channel('custom_products')->info([
-            'model id' => $product_id,
-            'model name' => $product_model,
-            'action' => $operation,
-            'updated at: ' => date('d-m-Y',strtotime($product->udpated_at)),
-        ]);
-
-        return redirect()->route('view.products');
+     
+    
+        return redirect()->route('products.index');
     }
 
-    public function DeleteProducts($id)
+    public function destroy(Product $product)
     {
-        $product_model = Product::class;
-        $operation = 'destroy';
-
-        $product = Product::find($id);
         $product->delete();
+        return redirect()->route('products.index');
 
-        $product_id = $product->id;
-        
-        $log = new Log([
-            'model_log_id' => $product_id,
-            'model_log_type' => $product_model,
-            'operation' => $operation,
-        ]);
-        
-        $log->logs()->associate($product)->save();
-        
+    }
 
-        FacadesLog::channel('custom_products')->info([
-            'model id' => $product_id,
-            'model name' => $product_model,
-            'action' => $operation,
-            'deleted at: ' =>  date('d-m-Y',strtotime($product->deleted_at)),
-            
-        ]); 
+    public function onlyTrashedProducts()
+    {
+        $products = Product::onlyTrashed()->whereNotNull('deleted_at')->get();
+        return view('backend.products.trashed', compact('products'));
+    }
 
-        return redirect()->route('view.products');
+    public function restoreProducts(Request $request, $id)
+    {
+        Product::onlyTrashed()->find($id)->restore();
+        return redirect()->route('trashed_products');
+    }
 
+    public function permanentlyDeleteProducts(Request $request, $id)
+    {
+        Product::onlyTrashed()->find($id)->forceDelete();
+        return redirect()->route('trashed_products');
     }
 }

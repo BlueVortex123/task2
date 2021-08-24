@@ -6,6 +6,7 @@
     <div class="row justify-content-center">
         <h3>Provider Add Page</h3><br>
     </div>
+   
     <div class="row justify-content-center">
         <div class="col-md-8">
 
@@ -35,14 +36,13 @@
                     </div>
                 </div>
 
-
-        <div class="text-xs-right">
-            <input type="submit" value="Update " class="btn btn-rounded btn-success ">
+                <div class="text-xs-right">
+                    <input type="submit" value="Update " class="btn btn-rounded btn-success ">
+                </div>
+            </form>
         </div>
-        </form>
     </div>
 </div>
-</div>
-</div>
+
 
 @endsection

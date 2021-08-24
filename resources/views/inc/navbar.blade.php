@@ -13,7 +13,7 @@
                     <a class="nav-link" href="{{ route('providers.index') }}">Providers</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('view.products') }}">Products</a>
+                    <a class="nav-link" href="{{ route('products.index') }}">Products</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('contracts.index') }}">Contracts</a>

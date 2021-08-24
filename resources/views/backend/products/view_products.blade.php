@@ -2,15 +2,17 @@
 
 @section('content')
 
-<div class="row">
-        <div class="col-12">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
                     <h1>Products</h1>
                     <div class="float-right">
-                        <a href="{{ route('add.products') }}" class="btn btn-success">Store new Product</a>
+                        <a href="{{ route('products.create') }}" class="btn btn-success">Store new Product</a>
                     </div>
                 </div>
+               
                 <div class="card-body">
                     <div class="table-responsive">
                                 <table class="table table-bordered">
@@ -23,9 +25,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($products as $key => $product )
+                                @foreach($products as $product )
                                 <tr>
-                                    <td>{{ $key+1 }}</td>
+                                    <td>{{ $product->id }}</td>
                                     <td>{{ $product->name }}</td>
                                     <th>
                                         @foreach($product->contracts as $contract)
@@ -34,17 +36,23 @@
                                     </th>
                                     
                                     <td>
-                                        <a href="{{ route('edit.products', $product->id) }}" class="btn btn-info">Edit</a>
-                                        <a href="{{ route('delete.products', $product->id ) }}" class="btn btn-danger">Delete</a>
-                                    </td>
+                                        <a href="{{ route('products.edit', $product->id) }}" class="btn btn-info float-left">Edit</a>
+                                        <form action="{{ route('products.destroy', $product) }}" method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger float-right">Delete</button>
+                                            </form>                                    
+                                        </td>
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
+                        <a href="{{ route('trashed_products') }}" class="btn btn-secondary float-right">Trash</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
             
 @endsection()
