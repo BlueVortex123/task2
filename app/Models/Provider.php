@@ -9,7 +9,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Provider extends Model
 {
-    use SoftDeletes, RecordsActivity, ActivityScope;
+    use SoftDeletes; 
+    // RecordsActivity, 
+    // ActivityScope;
 
     protected $fillable = [
         'name',
@@ -19,5 +21,10 @@ class Provider extends Model
     public function contracts()
     {
         return $this->hasMany(Contract::class);
+    }
+
+    public function logs()
+    {
+        return $this->morphMany(Log::class,'models_log');
     }
 }

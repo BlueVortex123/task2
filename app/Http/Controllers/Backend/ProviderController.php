@@ -3,164 +3,86 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Models\Contract;
-use App\Models\Log;
 use App\Models\Provider;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log as FacadesLog;
 
 class ProviderController extends Controller
 {
 
-    public function ViewProvider()
+    public function index()
     {
     
-        $data['providers'] = Provider::all();
-        
-
-        return view('backend.provider.view_provider',$data);
+        $providers = Provider::all();
+        return view('backend.provider.view_provider',compact('providers'));
     }
     
-    public function AddProvider()
+    public function create()
     {
         
         return view('backend.provider.add_provider');
 
     }
 
-    public function StoreProvider(Request $request)
+    public function store(Request $request)
     {
-        $provider_model = Provider::class;
-        $operation = 'store';
+        // $provider_model = Provider::class;
+        // $operation = 'store';
         
-        $validateData = $request->validate([
-            'name' => 'required',
-            'email' => 'required',
+        $validated = $request->validate([
+            'name' => 'required|string|min:3|max:255',
+            'email' => 'required|email',
         ]);
-
-        $provider = new Provider();
+        
+        $provider = new Provider($validated);
         $provider->name= $request->name;
         $provider->email= $request->email;
-        
         $provider->save();
         
-        $provider_id= $provider->id;
-        
-        $log = new Log([
-            'model_log_id' => $provider_id,
-            'model_log_type' => $provider_model,
-            'operation' => $operation,
-        ]);
-        
-        $log->logs()->associate($provider)->save();
-        
-        FacadesLog::channel('custom_providers')->info([
-
-            'model id' => $provider->id,
-            'model name' => $provider_model,
-            'action' => $operation,
-            'created at: ' => date('d-m-Y',strtotime($provider->created_at)),
-
-        ]); 
-       
-        return redirect()->route('view.providers');   
+        return redirect()->route('providers.index');   
         
         // $data['providers'] = Provider::with(['logs'])->first();
         // dd($data['providers']->toArray());
     }
-
-    public function EditProvider($id)
+    
+    public function edit(Provider $provider)
     {
-        $provider_model = Provider::class;
-        $operation = 'edit';
-        $data['editData'] = Provider::find($id);
-        $provider_id = $data['editData']->id;
-
-        
-        $log = new Log([
-            'model_log_id' => $provider_id,
-            'model_log_type' => $provider_model,
-            'operation' => $operation,
-        ]);
-
-        $log->logs()->associate($data['editData'])->save();
-        // $provider_name = $provider::where('id',$id)->first();
-       
-
-        FacadesLog::channel('custom_providers')->info([
-            'model id' => $provider_id,
-            'model name' => $provider_model,
-            'action' => $operation
-        ]);
-        
-        //  dd($data['editData']->toArray());
-        return view('backend.provider.edit_provider',$data);
+        return view('backend.provider.edit_provider',compact('provider'));
     }
-
-    public function UdpateProvider(Request $request,$id)
+    
+    public function update(Request $request,Provider $provider)
     {
-        $provider_model = Provider::class;        
-        $operation = 'update';
-      
-        $provider = Provider::find($id);
-        $provider->name= $request->name;
-        $provider->email= $request->email;
+        $validated = $request->validate([
+            'name' => 'required|string|min:3|max:255',
+            'email' => 'required|email',
+        ]);
+        
+        $provider->update($validated);
         $provider->save();
 
-        $provider_id = $provider->id;
-
-        $log = new Log([
-            'model_log_id' => $provider_id,
-            'model_log_type' => $provider_model,
-            'operation' => $operation,
-        ]);
-
-        $log->logs()->associate($provider)->save();
-        // $provider_name = $provider::where('id',$id)->first();
-       
-
-        FacadesLog::channel('custom_providers')->info([
-            'model id' => $provider_id,
-            'model name' => $provider_model,
-            'action' => $operation,
-            'updated at: ' =>  date('d-m-Y',strtotime($provider->deleted_at)),
-
-        ]);
-
-        return redirect()->route('view.providers');   
+        return redirect()->route('providers.index');   
     }
 
-    public function DeleteProvider($id)
+    public function destroy(Provider $provider)
     {
-        $provider_model = Provider::class; 
-        $operation = 'destroy';
-
-        $provider = Provider::find($id);
         $provider->delete();
-        
-        $provider_id = $provider->id;
-        
-        $log = new Log([
-            'model_log_id' => $provider_id,
-            'model_log_type' => $provider_model,
-            'operation' => $operation,
-        ]);
-        
-        $log->logs()->associate($provider)->save();
-        // $provider_name = $provider::where('id',$id)->first();
-        
+        return redirect()->route('providers.index');   
+    }
 
-        FacadesLog::channel('custom_providers')->info([
+    public function onlyTrashedProviders()
+    {
+        $providers = Provider::onlyTrashed()->whereNotNull('deleted_at')->get();
+        return view('backend.provider.trashed', compact('providers'));
+    }
 
-            'model id' => $provider_id,
-            'model name' => $provider_model,
-            'action' => $operation,
-            'deleted at: ' =>  date('d-m-Y',strtotime($provider->deleted_at)),
+    public function restoreProviders(Request $request, $id)
+    {
+        Provider::onlyTrashed()->find($id)->restore();
+        return redirect()->route('trashed_providers');
+    }
 
-        ]);
-
-
-        return redirect()->route('view.providers');   
-
+    public function permanentlyDeleteProviders(Request $request, $id)
+    {
+        Provider::onlyTrashed()->find($id)->forceDelete();
+        return redirect()->route('trashed_providers');
     }
 }

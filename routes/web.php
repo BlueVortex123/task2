@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Backend\ProductController;
-use App\Http\Controllers\Backend\ProviderController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,20 +12,18 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
+
 */
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::prefix('/provider')->group(function(){
-    Route::get('/providers/view', [ProviderController::class, 'ViewProvider'])->name('view.providers');
-    Route::get('/providers/add', [ProviderController::class, 'AddProvider'])->name('add.providers');
-    Route::post('/providers/store', [ProviderController::class, 'StoreProvider'])->name('store.providers');
-    Route::get('/providers/edit/{id}', [ProviderController::class, 'EditProvider'])->name('edit.providers');
-    Route::post('/providers/update/{id}', [ProviderController::class, 'UdpateProvider'])->name('update.providers');
-    Route::get('/providers/delete/{id}', [ProviderController::class, 'DeleteProvider'])->name('delete.providers');
-});
+Route::resource('/providers', App\Http\Controllers\Backend\ProviderController::class)->except('show');
+    Route::get('backend/providers/trashed', [App\Http\Controllers\Backend\ProviderController::class, 'onlyTrashedProviders'])->name('trashed_providers');
+    Route::get('backend/provider.restore/{id}', [App\Http\Controllers\Backend\ProviderController::class, 'restoreProviders'])->name('restore_providers');
+    Route::get('backend/providers/permanentlyDelete/{id}', [App\Http\Controllers\Backend\ProviderController::class, 'permanentlyDeleteProviders'])->name('permanently_delete_providers');
+
 
 // Contracts Routes
 Route::resource('/contracts', App\Http\Controllers\Backend\ContractController::class)->except('show');

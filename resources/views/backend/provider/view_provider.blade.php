@@ -2,18 +2,20 @@
 
 @section('content')
 
-<div class="row">
-        <div class="col-12">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
                     <h1>Providers</h1>
                     <div class="float-right">
-                        <a href="{{ route('add.providers') }}" class="btn btn-success">Store new Provider</a>
+                        <a href="{{ route('providers.create') }}" class="btn btn-success">Store new Provider</a>
                     </div>
                 </div>
+
                 <div class="card-body">
                     <div class="table-responsive">
-                                <table class="table table-bordered">
+                        <table class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -29,17 +31,23 @@
                                     <td>{{ $provider->name }}</td>
                                     <td>{{ $provider->email }}</td>
                                     <td>
-                                        <a href="{{ route('edit.providers' , $provider->id) }}" class="btn btn-info">Edit</a>
-                                        <a href="{{ route('delete.providers' , $provider->id) }}" class="btn btn-danger">Delete</a>
+                                        <a href="{{ route('providers.edit' , $provider->id) }}" class="btn btn-primary float-left">Edit</a>
+                                        <form action="{{ route('providers.destroy', $provider) }}" method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger float-right">Delete</button>
+                                        </form>                                    
                                     </td>
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
+                        <a href="{{ route('trashed_providers') }}" class="btn btn-secondary float-right">Trash</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-            
+</div>
+
 @endsection()

@@ -10,7 +10,7 @@
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('view.providers') }}">Providers</a>
+                    <a class="nav-link" href="{{ route('providers.index') }}">Providers</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('view.products') }}">Products</a>
