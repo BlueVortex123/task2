@@ -9,9 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use SoftDeletes; 
-    // RecordsActivity, 
-    // ActivityScope;
+    use SoftDeletes, RecordsActivity, ActivityScope;
 
     protected $fillable = ['name'];
 
@@ -20,8 +18,5 @@ class Product extends Model
         return $this->belongsToMany(Contract::class);
     }
 
-    public function logs()
-    {
-        return $this->morphMany(Log::class,'models_log');
-    }
+   
 }

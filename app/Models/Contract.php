@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Contract extends Model
 {
-    use SoftDeletes, RecordsActivity, ActivityScope;
+    use SoftDeletes ,RecordsActivity, ActivityScope;
 
     protected $fillable = [
         'provider_id',

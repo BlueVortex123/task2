@@ -25,7 +25,7 @@
                 </div>
 
                 <div class="text-xs-right">
-                    <input type="submit" value="Submit" c   lass="btn btn-rounded btn-success">
+                    <input type="submit" value="Submit" class="btn btn-rounded btn-success">
                 </div>
             </form>
         </div>
