@@ -21,5 +21,9 @@ class Provider extends Model
         return $this->hasMany(Contract::class);
     }
 
-   
+    // public function log()
+    // {
+    //     return $this->morphMany(Log::class,'models_log');
+    // }
 }
+

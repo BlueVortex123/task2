@@ -56,7 +56,7 @@ trait RecordsActivity
         ];
     }
 
-    public function activities()
+    public function logs()
     {
         return $this->morphMany(Log::class, 'subject');
     }

@@ -3,7 +3,6 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <a href="{{ route('welcome') }}">Back</a>
             <div class="col-md-8">
                 <h2 class="text-center">
                     @php
