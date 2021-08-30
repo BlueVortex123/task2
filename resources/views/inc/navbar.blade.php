@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-info">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{{ url('/') }}">
+        <a class="navbar-brand" href="{{ url('/backend/activities/activity') }}">
         {{ config('app.name', 'Task2') }}
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">

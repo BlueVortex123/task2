@@ -17,7 +17,7 @@ class LogController extends Controller
     {
         $model_type = ucfirst($model_type);
         abort_if(!class_exists("App\\Models\\$model_type"), 404);
-        // $activities = "App\\Models\\$model_type "::getActivities();
+        // $activites = "App\\Models\\$model_type"::getActivities();
 
         return view('backend.logs.list', compact('activities'));
     }
